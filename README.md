@@ -2,11 +2,6 @@
 
 **English** | [中文](https://github.com/doebkblcya/dsh-workbench/blob/main/README.zh-CN.md)
 
-[![npm version](https://img.shields.io/npm/v/@doebkblcya/dsh-workbench)](https://www.npmjs.com/package/@doebkblcya/dsh-workbench)
-[![npm downloads](https://img.shields.io/npm/dm/@doebkblcya/dsh-workbench)](https://www.npmjs.com/package/@doebkblcya/dsh-workbench)
-[![license](https://img.shields.io/npm/l/@doebkblcya/dsh-workbench)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/doebkblcya/dsh-workbench)](https://github.com/doebkblcya/dsh-workbench)
-
 A single-package plugin that adds a VS Code-style workbench to the right side of
 the **DSH Web GUI**: a **Preview** column plus a **Files / Git** panel — all
 rendered in-page, backed by a real filesystem + git service on the host.

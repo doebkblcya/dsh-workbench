@@ -2,11 +2,6 @@
 
 [English](https://github.com/doebkblcya/dsh-workbench/blob/main/README.md) | **中文**
 
-[![npm version](https://img.shields.io/npm/v/@doebkblcya/dsh-workbench)](https://www.npmjs.com/package/@doebkblcya/dsh-workbench)
-[![npm downloads](https://img.shields.io/npm/dm/@doebkblcya/dsh-workbench)](https://www.npmjs.com/package/@doebkblcya/dsh-workbench)
-[![license](https://img.shields.io/npm/l/@doebkblcya/dsh-workbench)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/doebkblcya/dsh-workbench)](https://github.com/doebkblcya/dsh-workbench)
-
 一个单包插件，为 **DSH Web GUI** 增加 VS Code 风格的右侧工作台：一个
 **Preview（预览）** 栏，加一个 **文件 / Git** 面板 —— 界面在页面内渲染，
 背后由宿主进程的真实文件系统 + git 服务支撑。
