@@ -10,9 +10,9 @@ rendered in-page, backed by a real filesystem + git service on the host.
 
 ![Files + Preview](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/preview.png)
 
-![Git panel — collapsible Changes + Graph sections](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/git.png)
-
-![Files tree with search](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/files.png)
+| Git panel — collapsible Changes + Graph sections | Files tree with search |
+|---|---|
+| ![](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/git.png) | ![](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/files.png) |
 
 ## Features
 

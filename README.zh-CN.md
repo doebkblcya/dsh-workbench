@@ -10,9 +10,9 @@
 
 ![文件 + 预览](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/preview.png)
 
-![Git 面板 — 可折叠的「更改 / 图表」分节](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/git.png)
-
-![文件树与搜索](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/files.png)
+| Git 面板 — 可折叠的「更改 / 图表」分节 | 文件树与搜索 |
+|---|---|
+| ![](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/git.png) | ![](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/files.png) |
 
 ## 特性
 
