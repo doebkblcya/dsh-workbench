@@ -1,0 +1,20 @@
+dsh-workbench
+==============
+
+A single-package right-side panel plugin for the DSH Web GUI: a VS Code-style
+three-column [Preview][Git][Files] workbench (file explorer, Source-Control-like
+changes + commit, and an inline Git graph).
+
+Derived from the dsh-web-ui monorepo (https://github.com/zhu1090093659/dsh-web-ui):
+
+  * dsh-aionui-panel  — file explorer / preview / SCM changes panel
+  * dsh-git-graph     — branch switching + Git graph
+
+Thank you to zhu1090093659 and the dsh-web-ui contributors for the upstream work,
+and to the AionUi project (iOfficeAI/AionUi) for the original right-panel design
+that dsh-aionui-panel re-implemented.
+
+This fork intentionally diverges from upstream (one-time fork, no upstream rebase):
+it merges the two plugins' host git services into one, moves the branch selector
+off the input header into the Git column, inlines the Git graph, and adds commit
+(and push/pull in a later phase).
