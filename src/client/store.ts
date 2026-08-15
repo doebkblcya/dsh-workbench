@@ -1106,8 +1106,6 @@ export interface GitState {
   commitError: PanelError | null
   /** Last push/pull rejection. */
   syncError: PanelError | null
-  /** Last successful push/pull notice. */
-  syncNotice: string | null
 }
 
 /** The git store with its async actions. */
@@ -1119,9 +1117,11 @@ export interface GitStore extends StateHandle<GitState> {
   switchBranch: (branch: string) => Promise<boolean>
   createBranch: (name: string) => Promise<boolean>
   commit: () => Promise<boolean>
-  push: () => Promise<void>
-  pull: () => Promise<void>
+  push: () => Promise<boolean>
+  pull: () => Promise<boolean>
   clearErrors: () => void
+  /** Dismiss the push/pull error bar. */
+  clearSync: () => void
 }
 
 /**
@@ -1144,7 +1144,6 @@ export function createGitStore(api: PanelApi, onGitChanged: () => void): GitStor
     switchError: null,
     commitError: null,
     syncError: null,
-    syncNotice: null,
   })
 
   let branchesSeq = 0
@@ -1169,8 +1168,7 @@ export function createGitStore(api: PanelApi, onGitChanged: () => void): GitStor
           switchError: null,
           commitError: null,
           syncError: null,
-          syncNotice: null,
-        }
+              }
       })
       if (root !== '') {
         void store.loadBranches()
@@ -1251,28 +1249,39 @@ export function createGitStore(api: PanelApi, onGitChanged: () => void): GitStor
       handle.update((prev) => ({ ...prev, committing: false, commitError: result.error }))
       return false
     },
-    async push() {
+    async push(): Promise<boolean> {
       const root = handle.getSnapshot().root
-      if (root === '') return
-      handle.update((prev) => ({ ...prev, syncing: true, syncError: null, syncNotice: null }))
+      if (root === '') return false
+      handle.update((prev) => ({ ...prev, syncing: true, syncError: null }))
       const result = await api.push(root)
       handle.update((prev) => result.ok
-        ? { ...prev, syncing: false, syncNotice: result.value.output.trim() }
+        ? { ...prev, syncing: false }
         : { ...prev, syncing: false, syncError: result.error })
-      if (result.ok) onGitChanged()
+      if (result.ok) {
+        onGitChanged()
+        return true
+      }
+      return false
     },
-    async pull() {
+    async pull(): Promise<boolean> {
       const root = handle.getSnapshot().root
-      if (root === '') return
-      handle.update((prev) => ({ ...prev, syncing: true, syncError: null, syncNotice: null }))
+      if (root === '') return false
+      handle.update((prev) => ({ ...prev, syncing: true, syncError: null }))
       const result = await api.pull(root)
       handle.update((prev) => result.ok
-        ? { ...prev, syncing: false, syncNotice: result.value.output.trim() }
+        ? { ...prev, syncing: false }
         : { ...prev, syncing: false, syncError: result.error })
-      if (result.ok) onGitChanged()
+      if (result.ok) {
+        onGitChanged()
+        return true
+      }
+      return false
     },
     clearErrors() {
-      handle.update((prev) => ({ ...prev, switchError: null, commitError: null, syncError: null, syncNotice: null }))
+      handle.update((prev) => ({ ...prev, switchError: null, commitError: null, syncError: null }))
+    },
+    clearSync() {
+      handle.update((prev) => (prev.syncError === null ? prev : { ...prev, syncError: null }))
     },
   })
   return store

@@ -90,13 +90,52 @@
 
 .syncNotice {
   flex-shrink: 0;
-  padding: 6px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 6px 6px 10px;
   border-bottom: 1px solid var(--aion-bg-3);
   color: var(--aion-text-secondary);
   font-size: 11px;
   line-height: 1.4;
   background: var(--aion-bg-2);
+}
+
+.syncNoticeText {
+  flex: 1;
+  min-width: 0;
   white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.syncNoticeClose {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--aion-text-tertiary);
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.syncNoticeClose:hover {
+  background: var(--aion-bg-3);
+  color: var(--aion-text-primary);
+}
+
+.syncNoticeClose:active {
+  background: var(--aion-bg-active);
+}
+
+.syncNoticeClose:focus-visible {
+  outline: 2px solid var(--aion-primary);
+  outline-offset: 2px;
 }
 
 /* ── commit box ─────────────────────────────────────────────────────────── */

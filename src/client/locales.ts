@@ -23,7 +23,7 @@ const zh = {
   'scm.repositories': '存储库',
   'scm.changes': '更改',
   'scm.staged': '已暂存',
-  'scm.unstaged': '变更',
+  'scm.unstaged': '未暂存',
   'scm.untracked': '未跟踪',
   'scm.conflicted': '冲突',
   'scm.stage': '暂存',
@@ -123,6 +123,8 @@ const zh = {
   'git.error.noUpstream': '当前分支没有上游分支。先在终端执行 git push -u origin <分支名> 建立跟踪，再同步。',
   'git.toast.switchSuccess': '已切换到分支 {branchName}',
   'git.toast.createSuccess': '已创建并切换到分支 {branchName}',
+  'git.toast.pushSuccess': '已推送',
+  'git.toast.pullSuccess': '已拉取',
 } as const
 
 const en: Record<keyof typeof zh, string> = {
@@ -141,7 +143,7 @@ const en: Record<keyof typeof zh, string> = {
   'scm.repositories': 'Repositories',
   'scm.changes': 'Changes',
   'scm.staged': 'Staged',
-  'scm.unstaged': 'Changes',
+  'scm.unstaged': 'Unstaged',
   'scm.untracked': 'Untracked',
   'scm.conflicted': 'Conflict',
   'scm.stage': 'Stage',
@@ -241,6 +243,8 @@ const en: Record<keyof typeof zh, string> = {
   'git.error.noUpstream': 'The current branch has no upstream. Run `git push -u origin <branch>` first to set tracking.',
   'git.toast.switchSuccess': 'Switched to branch {branchName}',
   'git.toast.createSuccess': 'Created and switched to branch {branchName}',
+  'git.toast.pushSuccess': 'Pushed',
+  'git.toast.pullSuccess': 'Pulled',
 }
 
 export type AionUiPanelKey = keyof typeof zh

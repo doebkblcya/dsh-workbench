@@ -24,7 +24,7 @@ import { FileTypeIcon } from './FileIcon.tsx'
 import { ConfirmDialog, toast } from './overlay.tsx'
 import { BranchPopover } from './BranchPopover.tsx'
 import {
-  BranchIcon, ChevronDownIcon, ChevronRightIcon, DownloadIcon, ListIcon, MinusIcon, PlusIcon, TreeIcon, UndoIcon, UploadIcon,
+  BranchIcon, ChevronDownIcon, ChevronRightIcon, CloseIcon, DownloadIcon, ListIcon, MinusIcon, PlusIcon, TreeIcon, UndoIcon, UploadIcon,
 } from './icons.tsx'
 import scmCss from '../styles/scm.module.css'
 import gitCss from '../styles/git.module.css'
@@ -206,10 +206,22 @@ export function ScmPanel({
               </button>
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: 6 }}>
-              <button type="button" className={gitCss.syncBtn} title={t('git.pull')} disabled={gitState.syncing} onClick={() => void git.pull()}>
+              <button
+                type="button"
+                className={gitCss.syncBtn}
+                title={t('git.pull')}
+                disabled={gitState.syncing}
+                onClick={() => { void git.pull().then((ok) => { if (ok) toast(t('git.toast.pullSuccess')) }) }}
+              >
                 <DownloadIcon size={13} />
               </button>
-              <button type="button" className={gitCss.syncBtn} title={t('git.push')} disabled={gitState.syncing} onClick={() => void git.push()}>
+              <button
+                type="button"
+                className={gitCss.syncBtn}
+                title={t('git.push')}
+                disabled={gitState.syncing}
+                onClick={() => { void git.push().then((ok) => { if (ok) toast(t('git.toast.pushSuccess')) }) }}
+              >
                 <UploadIcon size={13} />
               </button>
             </span>
@@ -222,9 +234,19 @@ export function ScmPanel({
             )}
           </div>
 
-          {(gitState.syncError !== null || gitState.syncNotice !== null) && (
+          {/* Sync failures only (success is a toast); dismissible. */}
+          {gitState.syncError !== null && (
             <div className={gitCss.syncNotice}>
-              {gitState.syncError !== null ? gitErrorCopy(gitState.syncError) : gitState.syncNotice}
+              <span className={gitCss.syncNoticeText}>{gitErrorCopy(gitState.syncError)}</span>
+              <button
+                type="button"
+                className={gitCss.syncNoticeClose}
+                title={t('common.close')}
+                aria-label={t('common.close')}
+                onClick={() => git.clearSync()}
+              >
+                <CloseIcon size={12} />
+              </button>
             </div>
           )}
 
@@ -263,7 +285,7 @@ export function ScmPanel({
                     <Group
                       scm={scm}
                       preview={preview}
-                      title={staged.length > 0 ? t('scm.staged') : undefined}
+                      title={staged.length > 0 ? `${t('scm.staged')} (${staged.length})` : undefined}
                       rows={staged}
                       bulkLabel={t('scm.unstage')}
                       onBulk={(rows) => void scm.unstage(rows.map((row) => row.path))}
@@ -274,6 +296,7 @@ export function ScmPanel({
                     <Group
                       scm={scm}
                       preview={preview}
+                      title={`${t('scm.unstaged')} (${unstaged.length})`}
                       rows={unstaged}
                       bulkLabel={t('scm.stage')}
                       onBulk={(rows) => void scm.stage(rows.map((row) => row.path))}
@@ -284,7 +307,7 @@ export function ScmPanel({
                     <Group
                       scm={scm}
                       preview={preview}
-                      title={t('scm.untracked')}
+                      title={`${t('scm.untracked')} (${untracked.length})`}
                       rows={untracked}
                       bulkLabel={t('scm.stage')}
                       onBulk={(rows) => void scm.stage(rows.map((row) => row.path))}
