@@ -1,2 +1,4 @@
 node_modules/
 lib/
+# 内部交接文档：本地维护，不进公共仓库与 npm 包
+HANDOFF.md

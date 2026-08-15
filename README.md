@@ -4,14 +4,19 @@
 
 A single-package plugin that adds a VS Code-style right-side workbench to the
 DSH Web GUI: a **Preview** column plus a **single workbench panel** with
-**Files / Git** tabs.
+**Files / Git** icon tabs.
 
-- **Workbench panel** (flush with the window edge): a Files/Git tab bar.
+- **Workbench panel** (flush with the window edge): a Files/Git icon tab bar.
   - **Files**: a lazy file tree with filename search. Clicking a file opens it
     in the Preview column; clicking a folder row expands/collapses it.
-  - **Git**: split top/bottom. The top is a Source-Control-like pane — branch
-    bar (switch / create branch), commit box, and the changes list
-    (stage / unstage / discard). The bottom is an inline Git graph.
+  - **Git**: two collapsible VS Code-style sections.
+    - **Changes (更改)**: branch bar (switch / create), commit box, and the
+      changes list (staged / unstaged / untracked, each with a count header).
+    - **Graph (图表)**: the inline Git graph (windowed rendering keeps large
+      repos light).
+    - Sections collapse with a smooth 200ms animation; while both are open a
+      draggable divider resizes the split. Push/pull report success as a
+      toast; failures show in a dismissible error bar.
 - **Preview** (to the left of the workbench panel): multi-tab preview of
   markdown / html / code / diff / csv / pdf / office / images / text, with
   source↔preview toggle, split edit and save.
@@ -22,11 +27,12 @@ DSH Web GUI: a **Preview** column plus a **single workbench panel** with
 |---|---|
 | File explorer + filename search | ✅ |
 | Multi-format preview | ✅ |
-| Changes list (stage / unstage / discard) | ✅ |
+| Changes list (stage / unstage / discard) with group counts | ✅ |
 | Branch switch / create | ✅ |
-| Inline Git graph | ✅ |
+| Inline Git graph (windowed) | ✅ |
 | Commit | ✅ |
-| Push / pull | ✅ (host-side auth) |
+| Push / pull | ✅ (host-side auth; toast + dismissible errors) |
+| Collapsible sections with animation + resize divider | ✅ |
 
 ## Architecture
 
