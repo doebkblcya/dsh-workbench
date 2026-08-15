@@ -48,7 +48,11 @@
 dsh plugin --profile web add link:<path-to-this-repo>
 ```
 
-~~从 npm（发布后）：`dsh plugin --profile web add @doebkblcya/dsh-workbench`~~
+从 npm（已发布）：
+
+```sh
+dsh plugin --profile web add @doebkblcya/dsh-workbench
+```
 
 ## 构建
 

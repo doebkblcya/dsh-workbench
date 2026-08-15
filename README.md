@@ -54,7 +54,11 @@ From source (local):
 dsh plugin --profile web add link:<path-to-this-repo>
 ```
 
-~~From npm (once published): `dsh plugin --profile web add @doebkblcya/dsh-workbench`~~
+From npm (published):
+
+```sh
+dsh plugin --profile web add @doebkblcya/dsh-workbench
+```
 
 ## Build
 
