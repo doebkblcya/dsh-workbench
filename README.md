@@ -2,24 +2,39 @@
 
 **English** | [中文](https://github.com/doebkblcya/dsh-workbench/blob/main/README.zh-CN.md)
 
-A single-package plugin that adds a VS Code-style right-side workbench to the
-DSH Web GUI: a **Preview** column plus a **single workbench panel** with
-**Files / Git** icon tabs.
+[![npm version](https://img.shields.io/npm/v/@doebkblcya/dsh-workbench)](https://www.npmjs.com/package/@doebkblcya/dsh-workbench)
+[![npm downloads](https://img.shields.io/npm/dm/@doebkblcya/dsh-workbench)](https://www.npmjs.com/package/@doebkblcya/dsh-workbench)
+[![license](https://img.shields.io/npm/l/@doebkblcya/dsh-workbench)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/doebkblcya/dsh-workbench)](https://github.com/doebkblcya/dsh-workbench)
 
-- **Workbench panel** (flush with the window edge): a Files/Git icon tab bar.
-  - **Files**: a lazy file tree with filename search. Clicking a file opens it
-    in the Preview column; clicking a folder row expands/collapses it.
-  - **Git**: two collapsible VS Code-style sections.
-    - **Changes (更改)**: branch bar (switch / create), commit box, and the
-      changes list (staged / unstaged / untracked, each with a count header).
-    - **Graph (图表)**: the inline Git graph (windowed rendering keeps large
-      repos light).
-    - Sections collapse with a smooth 200ms animation; while both are open a
-      draggable divider resizes the split. Push/pull report success as a
-      toast; failures show in a dismissible error bar.
-- **Preview** (to the left of the workbench panel): multi-tab preview of
-  markdown / html / code / diff / csv / pdf / office / images / text, with
-  source↔preview toggle, split edit and save.
+A single-package plugin that adds a VS Code-style workbench to the right side of
+the **DSH Web GUI**: a **Preview** column plus a **Files / Git** panel — all
+rendered in-page, backed by a real filesystem + git service on the host.
+
+## Screenshots
+
+![Files + Preview](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/preview.png)
+
+![Git panel — collapsible Changes + Graph sections](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/git.png)
+
+![Files tree with search](https://raw.githubusercontent.com/doebkblcya/dsh-workbench/main/docs/screenshots/files.png)
+
+## Features
+
+- **Files** — a lazy file tree with filename search; clicking a file opens it
+  in the Preview column (drag it into the input to insert the path).
+- **Git** — two collapsible VS Code-style sections:
+  - **Changes**: branch bar (switch / create), commit box, and the changes
+    list (staged / unstaged / untracked, each with a count header).
+  - **Graph**: the inline Git graph with lanes and ref labels — *windowed*
+    rendering keeps large repos light.
+- Sections collapse with a smooth 200 ms animation; while both are open a
+  draggable divider resizes the split (18%–80%).
+- Push/pull report success as a toast; failures show in a dismissible error
+  bar with actionable copy (auth / no-upstream / diverged / identity…).
+- **Preview** — multi-tab preview of markdown / html / code / diff / csv /
+  pdf / office / images / text, with source↔preview toggle, split edit and
+  save (write-conflict protected).
 
 ## What it does
 
@@ -36,35 +51,51 @@ DSH Web GUI: a **Preview** column plus a **single workbench panel** with
 
 ## Architecture
 
-- **Host half** (`src/host`, `src/index.ts`): workspace-gated filesystem +
-  a *single unified* git service, exposed over `/workbench/*` (fs) and
-  `/git/*` (git), plus one `/workbench/events` SSE stream.
-- **Browser half** (`src/client`): a DOM layout controller that extends the
-  shell's 3-column grid into 5 columns (Preview + workbench panel), two React
-  roots, and framework-free stores (layout / explorer / scm / preview / git).
-- The two upstream git services (dsh-aionui-panel's changes + dsh-git-graph's
-  branches/graph/switch) are merged into one service with one gate, one repo
-  cache, and one combined operation-marker probe (1 git spawn, not 7).
+The plugin ships two halves in one package; the browser UI and the host
+service talk over HTTP + an SSE change stream (fs watch + git poll merged).
 
-## Install
-
-From source (local):
-
-```sh
-dsh plugin --profile web add link:<path-to-this-repo>
+```mermaid
+flowchart LR
+  subgraph Host[DSH web server · Node.js]
+    H["Host half (src/host)<br/>gated fs + unified git service<br/>routes · workspace gate · poll guard"]
+  end
+  subgraph Page[Browser · DSH Web GUI]
+    C["Client half (src/client)<br/>React panels · framework-free stores<br/>DOM layout controller"]
+  end
+  H <-->|"HTTP /workbench/* · /git/*<br/>+ SSE /workbench/events"| C
 ```
 
-From npm (published):
+- **Host half** (`src/host`): workspace-gated filesystem + a *single unified*
+  git service (the two upstream git services merged into one gate, one repo
+  cache, one operation-marker probe — 1 git spawn instead of 7).
+- **Browser half** (`src/client`): a DOM layout controller that extends the
+  shell's grid with the Preview + workbench columns, React components, and
+  framework-free stores (layout / explorer / scm / preview / git) with
+  per-project persistence.
+
+## Usage
+
+Install the published package:
 
 ```sh
 dsh plugin --profile web add @doebkblcya/dsh-workbench
 ```
 
-## Build
+In any project session the panel appears on the right:
+
+- **Files** tab — browse the tree; click a file to open it in Preview.
+- **Git** tab — stage/discard from the changes list, write a message and
+  commit (Ctrl+Enter), then push/pull from the branch bar; the graph shows
+  the history with refs and lanes.
+
+## Development
 
 ```sh
 npm install
-npm run build   # tsc -b && tsdown → lib/index.js + lib/client.js
+npm run build        # tsc -b && tsdown → lib/index.js + lib/client.js
+npm run typecheck
+# link the local checkout into your profile:
+dsh plugin --profile web add link:<path-to-this-repo>
 ```
 
 ## License & attribution
