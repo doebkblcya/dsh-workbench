@@ -1,5 +1,7 @@
 # dsh-workbench — DSH Web GUI right-side workbench
 
+**English** | [中文](./README.zh-CN.md)
+
 A single-package plugin that adds a VS Code-style right-side workbench to the
 DSH Web GUI: a **Preview** column plus a **single workbench panel** with
 **Files / Git** tabs.
@@ -46,11 +48,7 @@ From source (local):
 dsh plugin --profile web add link:<path-to-this-repo>
 ```
 
-From npm:
-
-```sh
-dsh plugin --profile web add @doebkblcya/dsh-workbench
-```
+~~From npm (once published): `dsh plugin --profile web add @doebkblcya/dsh-workbench`~~
 
 ## Build
 
