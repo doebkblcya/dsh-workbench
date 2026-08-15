@@ -1,6 +1,6 @@
 # dsh-workbench — DSH Web GUI 右侧工作台
 
-[English](./README.md) | **中文**
+[English](https://github.com/doebkblcya/dsh-workbench/blob/main/README.md) | **中文**
 
 一个单包插件，为 DSH Web GUI 增加 VS Code 风格的右侧工作台：一个
 **Preview（预览）** 栏，加一个带 **文件 / Git** 两个图标 tab 的**单一工作台面板**。

@@ -428,10 +428,3 @@
   }
 }
 
-/* ── 隐藏 remote-web-ui 的「检查更新」触发器 ───────────────────────────── */
-/* 全家桶更新按钮（UpdateEntry）挂在侧边栏「移动端远程控制」旁；本机更新走
-   `dsh plugin add <包>@<版本>` 手动管理，这里将其隐藏（面板入口随之不可达）。 */
-:global(button[aria-label="检查更新"]),
-:global(button[aria-label="Check for updates"]) {
-  display: none !important;
-}

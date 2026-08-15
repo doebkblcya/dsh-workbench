@@ -1,7 +1,7 @@
 {
   "name": "@doebkblcya/dsh-workbench",
   "description": "DSH Web GUI right-side workbench plugin: a VS Code-style single right panel with Files/Git tabs plus a Preview column — lazy file explorer, Source-Control-like changes + commit, branch switching, and an inline Git graph — driven by real host-side fs/git services, hot-pluggable via a profile bundle without any dsh source changes.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "engines": {
     "node": "^22.19.0 || >=24.0.0"

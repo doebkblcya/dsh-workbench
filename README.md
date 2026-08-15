@@ -1,6 +1,6 @@
 # dsh-workbench — DSH Web GUI right-side workbench
 
-**English** | [中文](./README.zh-CN.md)
+**English** | [中文](https://github.com/doebkblcya/dsh-workbench/blob/main/README.zh-CN.md)
 
 A single-package plugin that adds a VS Code-style right-side workbench to the
 DSH Web GUI: a **Preview** column plus a **single workbench panel** with
