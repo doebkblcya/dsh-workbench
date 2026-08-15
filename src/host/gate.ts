@@ -1,10 +1,10 @@
 /**
- * Workspace gate for the /aionui-panel routes: canonicalize the requested
+ * Workspace gate for the /workbench routes: canonicalize the requested
  * project root and require it to be a registered workspace (or a directory
  * inside one). This is the security boundary of the panel's fs/git routes -
  * the browser may only read and mutate files under registered workspace
  * roots, never arbitrary host directories.
- * @module dsh-aionui-panel/host/gate
+ * @module dsh-workbench/host/gate
  */
 
 import { realpath } from 'node:fs/promises'

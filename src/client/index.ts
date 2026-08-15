@@ -10,7 +10,7 @@
  *
  * AionUi right-panel design (Apache-2.0, iOfficeAI/AionUi) — re-implemented
  * from measured behavior and architecture, not copied code.
- * @module dsh-aionui-panel/client
+ * @module dsh-workbench/client
  */
 
 import type { ClientContext, SessionId } from '@deepseek-ai/dsh-client-runtime/client'
@@ -29,7 +29,7 @@ import { insertPathIntoDraft } from './drag/file-drag.ts'
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Panel surface copy. */
-    'aionui-panel': AionUiPanelKey
+    'dsh-workbench': AionUiPanelKey
   }
 }
 
@@ -38,7 +38,7 @@ export const inject = ['sessions', 'locale']
 
 /** Apply the browser half. */
 export function apply(ctx: ClientContext): void {
-  ctx.effect(() => ctx.locale.register(NS, dictionaries), 'dsh-aionui-panel: dictionaries')
+  ctx.effect(() => ctx.locale.register(NS, dictionaries), 'dsh-workbench: dictionaries')
 
   // The composer drop target for explorer file drags: mounted in the
   // official `conversation.input.dock` band (declared by the shipped
@@ -153,7 +153,7 @@ export function apply(ctx: ClientContext): void {
       layout.mount()
       mountPanels(stores, () => layout.toggleExplorer())
     } catch (error) {
-      console.error('[dsh-aionui-panel] mount failed:', error)
+      console.error('[dsh-workbench] mount failed:', error)
     }
 
     // Debounced persists (explorer/scm/preview) may be pending when the page
@@ -174,5 +174,5 @@ export function apply(ctx: ClientContext): void {
       for (const dispose of disposers) dispose()
       layout.dispose()
     }
-  }, 'dsh-aionui-panel: wiring')
+  }, 'dsh-workbench: wiring')
 }

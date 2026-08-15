@@ -4,7 +4,7 @@
  * the rAF-flush loop, the e.buttons === 0 fallback, every end path, and the
  * drag styles. Pure DOM — no React, so both callers run the exact same
  * smoothness core (AionUi's useResizableSplit architecture, re-implemented).
- * @module dsh-aionui-panel/client/drag
+ * @module dsh-workbench/client/drag
  */
 
 export interface DragStartOptions {

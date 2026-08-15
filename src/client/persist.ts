@@ -8,7 +8,7 @@
  *   chat-workspace-width-px, chat-preview-width-px, preview-panel-split-ratio,
  *   project-panel-collapse:<root>, explorer-ui:<root>, scm-ui:<root>,
  *   preview-ui:<root>.
- * @module dsh-aionui-panel/client/persist
+ * @module dsh-workbench/client/persist
  */
 
 /** Read a stored number, validating it against [min, max]; fallback otherwise. */

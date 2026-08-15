@@ -4,7 +4,7 @@
  * middle-click close, right-click menu (close left/right/others/all), the
  * 32px left/right overflow fade indicators (ResizeObserver + scroll), the
  * new-URL-tab plus, and the panel collapse button.
- * @module dsh-aionui-panel/client/preview/PreviewTabs
+ * @module dsh-workbench/client/preview/PreviewTabs
  */
 
 import { useEffect, useRef, useState } from 'react'

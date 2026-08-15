@@ -3,7 +3,7 @@
  * framework-free machinery in drag.ts (AionUi's useResizableSplit
  * architecture, re-implemented): px or ratio units, range-validated
  * localStorage persistence, double-click reset to the default width.
- * @module dsh-aionui-panel/client/hooks/useResizableSplit
+ * @module dsh-workbench/client/hooks/useResizableSplit
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'

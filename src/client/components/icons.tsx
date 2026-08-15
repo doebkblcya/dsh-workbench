@@ -2,7 +2,7 @@
  * Inline 16px icon set for the panel surfaces (outline style, currentColor).
  * No icon package is introduced; the set covers the explorer tree, SCM rows,
  * and the preview toolbar/tabs with plain geometric shapes.
- * @module dsh-aionui-panel/client/components/icons
+ * @module dsh-workbench/client/components/icons
  */
 
 import type { JSX, SVGProps } from 'react'

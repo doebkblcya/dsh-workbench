@@ -3,7 +3,7 @@
  * fenced + inline code, bold/italic, links/images, lists, blockquotes, hr,
  * and tables. All HTML is escaped before transformation — the output only
  * ever contains the renderer's own tags. Pure and exported for tests.
- * @module dsh-aionui-panel/client/preview/markdown
+ * @module dsh-workbench/client/preview/markdown
  */
 
 /** Escape HTML special characters. */

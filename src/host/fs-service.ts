@@ -6,7 +6,7 @@
  * root and refuses to escape it (path traversal guard). Text is decoded utf-8;
  * images come back as data URLs (capped) so the browser renders them without
  * extra round trips.
- * @module dsh-aionui-panel/host/fs-service
+ * @module dsh-workbench/host/fs-service
  */
 
 import { readdir, readFile, realpath, stat, writeFile, rm, mkdir } from 'node:fs/promises'

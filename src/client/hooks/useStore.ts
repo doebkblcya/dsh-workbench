@@ -2,7 +2,7 @@
  * React bindings for the framework-free stores: useSyncExternalStore with a
  * stable snapshot (the stores return immutable snapshots, so selector-free
  * subscription is safe), plus a stable-callback helper for event handlers.
- * @module dsh-aionui-panel/client/hooks/useStore
+ * @module dsh-workbench/client/hooks/useStore
  */
 
 import { useCallback, useRef, useSyncExternalStore } from 'react'

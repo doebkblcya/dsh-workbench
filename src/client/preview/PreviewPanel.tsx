@@ -4,7 +4,7 @@
  * (the single entry for every batch close — middle-click included), and the
  * panel collapse button. View mode and split live here so the toolbar and the
  * content share one source; both reset when the displayed file changes.
- * @module dsh-aionui-panel/client/preview/PreviewPanel
+ * @module dsh-workbench/client/preview/PreviewPanel
  */
 
 import { useEffect, useRef, useState } from 'react'

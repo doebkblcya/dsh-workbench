@@ -11,7 +11,7 @@
  * the composer host's own drop handling (OS image files) is untouched. The
  * host's `dragover` refuses every drop it does not claim, so this inlay
  * must `preventDefault` its own drags to make the drop land.
- * @module dsh-aionui-panel/client/drag/DragFileInlay
+ * @module dsh-workbench/client/drag/DragFileInlay
  */
 
 import { useEffect, useRef, useState, type ReactElement } from 'react'

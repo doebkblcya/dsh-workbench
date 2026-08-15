@@ -9,7 +9,7 @@
  * image pipeline), so a workspace file needs its own MIME. A plain relative
  * path is inserted into the draft — the agent reads the file through its
  * existing tools without any prefix grammar.
- * @module dsh-aionui-panel/client/drag/file-drag
+ * @module dsh-workbench/client/drag/file-drag
  */
 
 /** Custom MIME carrying a workspace-relative file path. */

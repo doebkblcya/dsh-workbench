@@ -3,7 +3,7 @@
  * (markdown/html), split-screen toggle (editable types), download. Right: the
  * refresh button (4-state: hidden/disabled/idle/updated — never a dead
  * button) and save (editable + dirty, Cmd/Ctrl+S too).
- * @module dsh-aionui-panel/client/preview/PreviewToolbar
+ * @module dsh-workbench/client/preview/PreviewToolbar
  */
 
 import type { JSX } from 'react'

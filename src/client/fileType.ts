@@ -2,7 +2,7 @@
  * Preview content-type detection from a file name — the router's single
  * source of truth for what a file becomes when opened (mirrors AionUi's
  * getFileTypeInfo table, re-derived for the panel's format set).
- * @module dsh-aionui-panel/client/fileType
+ * @module dsh-workbench/client/fileType
  */
 
 import type { PreviewContentType } from '../core/types.ts'

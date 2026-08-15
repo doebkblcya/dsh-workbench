@@ -2,7 +2,7 @@
  * Locale strings for the panel surfaces (zh/en). The client registers the
  * dictionary through the locale service like the sibling plugins; copy is
  * deliberately short and technical.
- * @module dsh-aionui-panel/client/locales
+ * @module dsh-workbench/client/locales
  */
 
 import type { PanelError } from '../core/types.ts'
@@ -246,7 +246,7 @@ const en: Record<keyof typeof zh, string> = {
 export type AionUiPanelKey = keyof typeof zh
 
 /** The dictionary namespace this plugin owns. */
-export const NS = 'aionui-panel'
+export const NS = 'dsh-workbench'
 
 /** Format one copy string with {name} placeholders. */
 export function format(template: string, params: Record<string, string | number>): string {

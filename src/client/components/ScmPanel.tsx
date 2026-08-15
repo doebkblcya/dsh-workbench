@@ -10,7 +10,7 @@
  * refreshes (external editors write without git events), unknown states
  * render as a quiet '?', conflicted rows are visually distinct AND have no
  * actions.
- * @module dsh-aionui-panel/client/components/ScmPanel
+ * @module dsh-workbench/client/components/ScmPanel
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react'

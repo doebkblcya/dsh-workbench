@@ -7,7 +7,7 @@
  * AionUi's right-panel architecture (Apache-2.0, re-implemented): the width
  * clamps below are the exact ordered pair that keeps the chat area >= 360px
  * at all times (see the research report's section 4.2).
- * @module dsh-aionui-panel/client/store
+ * @module dsh-workbench/client/store
  */
 
 import type { BranchesView, FileRead, FsEntry, GitStatusView, GraphView, PanelError, PreviewContentType, SearchHit } from '../core/types.ts'

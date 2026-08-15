@@ -4,7 +4,7 @@
  * preview when the displayed FILE changes (keyed on path+type, not tab id —
  * AionUi contract), and the split ratio is persisted under
  * preview-panel-split-ratio with a 20..80 clamp.
- * @module dsh-aionui-panel/client/preview/content
+ * @module dsh-workbench/client/preview/content
  */
 
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'

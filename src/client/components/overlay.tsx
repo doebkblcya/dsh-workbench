@@ -2,7 +2,7 @@
  * Minimal overlay primitives for the panel: a toast and a context menu,
  * rendered through plain DOM + portals so they can live outside the grid
  * columns (fixed positioning, high z-index).
- * @module dsh-aionui-panel/client/components/overlay
+ * @module dsh-workbench/client/components/overlay
  */
 
 import { useEffect, useLayoutEffect, useState } from 'react'

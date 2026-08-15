@@ -2,7 +2,7 @@
  * 16x16 file/folder icons for the tree — a small built-in set (folder
  * open/closed, file variants by kind) using the token colors, so both themes
  * stay consistent without pulling in a vscode-icons package.
- * @module dsh-aionui-panel/client/components/FileIcon
+ * @module dsh-workbench/client/components/FileIcon
  */
 
 import type { JSX } from 'react'
