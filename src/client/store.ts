@@ -446,7 +446,7 @@ export interface ScmState {
   failed: string[]
   /** list | tree. */
   viewMode: 'list' | 'tree'
-  /** Section collapse map (repositories | changes). */
+  /** Section collapse map (changes | graph). */
   sectionCollapsed: Record<string, boolean>
   /** Tree-view expanded dir keys. */
   treeExpanded: string[]

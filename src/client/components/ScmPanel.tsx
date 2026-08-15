@@ -16,14 +16,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { JSX } from 'react'
 import type { GitChangeRow } from '../../core/types.ts'
-import { t, format } from '../locales.ts'
+import { t, gitErrorCopy, format } from '../locales.ts'
 import { useStore } from '../hooks/useStore.ts'
 import type { PanelStores } from '../store.ts'
-import { ConfirmDialog } from './overlay.tsx'
 import { activateOnKey } from './a11y.ts'
 import { FileTypeIcon } from './FileIcon.tsx'
-import { BranchIcon, ChevronDownIcon, ChevronRightIcon, ListIcon, MinusIcon, PlusIcon, TreeIcon, UndoIcon } from './icons.tsx'
+import { ConfirmDialog, toast } from './overlay.tsx'
+import { BranchPopover } from './BranchPopover.tsx'
+import {
+  BranchIcon, ChevronDownIcon, ChevronRightIcon, DownloadIcon, ListIcon, MinusIcon, PlusIcon, TreeIcon, UndoIcon, UploadIcon,
+} from './icons.tsx'
 import scmCss from '../styles/scm.module.css'
+import gitCss from '../styles/git.module.css'
 
 /** Minimum gap between window-focus SCM refreshes (ms). */
 const FOCUS_REFRESH_MIN_MS = 5_000
@@ -59,11 +63,22 @@ function buildTree(rows: GitChangeRow[]): Map<string, GitChangeRow[]> {
 
 /** The SCM tab body.
  * @param stores - the panel store bundle.
+ * @param onCreateBranch - open the create-branch dialog (owned by the Git
+ * column); the branch chip's popover lives here.
  */
-export function ScmPanel({ stores }: { stores: PanelStores }): JSX.Element {
+export function ScmPanel({
+  stores,
+  onCreateBranch,
+}: {
+  stores: PanelStores
+  onCreateBranch: () => void
+}): JSX.Element {
   const scm = stores.scm
   const preview = stores.preview
+  const git = stores.git
   const state = useStore(scm)
+  const gitState = useStore(git)
+  const [branchOpen, setBranchOpen] = useState(false)
   const [discardTargets, setDiscardTargets] = useState<GitChangeRow[] | null>(null)
 
   // Window focus refreshes (catches external editors writing the tree).
@@ -87,134 +102,199 @@ export function ScmPanel({ stores }: { stores: PanelStores }): JSX.Element {
   const status = state.status
   const changesSectionOpen = state.sectionCollapsed['changes'] !== true
 
-  const requestDiscard = (rows: GitChangeRow[]): void => {
-    if (rows.length === 0) return
-    setDiscardTargets(rows)
+  const staged = status?.staged ?? []
+  const unstaged = status?.unstaged ?? []
+  const untracked = status?.untracked ?? []
+  const hasChanges = staged.length + unstaged.length + untracked.length > 0
+
+  const branch = status?.branch ?? ''
+  const worktreeCount = unstaged.length + untracked.length
+
+  // The commit box lives inside the 更改 section (VS Code layout).
+  const canCommit = staged.length > 0 && gitState.commitMessage.trim() !== '' && !gitState.committing
+  const doCommit = (): void => {
+    void git.commit().then((ok) => { if (ok) toast(t('git.commit.success')) })
   }
+
+  /** Stage every worktree change (modified + untracked), like VS Code. */
+  const stageAll = (): void => {
+    void scm.stage([...unstaged.map((row) => row.path), ...untracked.map((row) => row.path)])
+  }
+
+  /** Discard all worktree changes (confirm dialog below). */
+  const discardAll = (): void => {
+    if (worktreeCount === 0) return
+    setDiscardTargets([...unstaged, ...untracked])
+  }
+
   const confirmDiscard = (): void => {
     if (discardTargets === null) return
     void scm.discard(discardTargets.map((row) => row.path))
     setDiscardTargets(null)
   }
 
-  if (state.loading && status === null) {
-    return <div className={`aionui-root ${scmCss.panel}`}><div className={scmCss.loading}>{t('scm.loading')}</div></div>
-  }
-  if (state.gitMissing) {
-    return <div className={`aionui-root ${scmCss.panel}`}><div className={scmCss.notRepo}>{t('scm.gitMissing')}</div></div>
-  }
-  if (status === null) {
-    return <div className={`aionui-root ${scmCss.panel}`}><div className={scmCss.notRepo}>{t('scm.notRepo')}</div></div>
-  }
-
-  const staged = status.staged
-  const unstaged = status.unstaged
-  const untracked = status.untracked
-  const hasChanges = staged.length + unstaged.length + untracked.length > 0
   const allUntracked = discardTargets !== null && discardTargets.every((row) => row.state === 'untracked')
 
-  return (
-    <div className={`aionui-root ${scmCss.panel}`}>
-      {/* Changes section. */}
-      <div className={scmCss.section} style={{ flex: changesSectionOpen ? 1 : undefined, maxHeight: changesSectionOpen ? undefined : 24 }}>
-        <div
-          className={scmCss.sectionHeader}
-          onClick={() => scm.setSectionCollapsed('changes', changesSectionOpen)}
-          onKeyDown={activateOnKey(() => { scm.setSectionCollapsed('changes', changesSectionOpen) })}
-          role="button"
-          tabIndex={0}
-          aria-expanded={changesSectionOpen}
-        >
-          <span className={`${scmCss.sectionChevron}${changesSectionOpen ? ` ${scmCss.sectionChevronOpen}` : ''}`}>
-            <ChevronRightIcon size={13} />
-          </span>
-          <span className={scmCss.sectionTitle}>{t('scm.changes')}</span>
-          {status.branch !== '' && (
-            <span className={scmCss.branchName} style={{ fontSize: 11, color: 'var(--aion-text-tertiary)', display: 'flex', alignItems: 'center', gap: 4 }}>
-              <BranchIcon size={12} />
-              {status.branch}
-            </span>
-          )}
-          <span
-            style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: 'auto' }}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              className={scmCss.sectionAction}
-              title={t('scm.stageAll')}
-              onClick={() => void scm.stage(unstaged.map((row) => row.path))}
-              disabled={unstaged.length === 0}
-            >
-              <PlusIcon size={13} />
-            </button>
-            <button
-              type="button"
-              className={scmCss.sectionAction}
-              title={t('scm.discardAll')}
-              onClick={() => requestDiscard([...unstaged, ...untracked])}
-              disabled={unstaged.length + untracked.length === 0}
-            >
-              <UndoIcon size={13} />
-            </button>
-            <button
-              type="button"
-              className={`${scmCss.sectionAction}${state.viewMode === 'list' ? '' : ''}`}
-              title={t('scm.viewList')}
-              style={{ color: state.viewMode === 'list' ? 'var(--aion-brand)' : undefined }}
-              onClick={() => scm.setViewMode('list')}
-            >
-              <ListIcon size={13} />
-            </button>
-            <button
-              type="button"
-              className={scmCss.sectionAction}
-              title={t('scm.viewTree')}
-              style={{ color: state.viewMode === 'tree' ? 'var(--aion-brand)' : undefined }}
-              onClick={() => scm.setViewMode('tree')}
-            >
-              <TreeIcon size={13} />
-            </button>
-          </span>
-        </div>
+  /** Open the discard confirm for a set of rows (rows + top-bar discard-all). */
+  const requestDiscard = (rows: GitChangeRow[]): void => {
+    if (rows.length === 0) return
+    setDiscardTargets(rows)
+  }
 
-        {changesSectionOpen && (
-          <div className={scmCss.sectionBody}>
-            {!hasChanges && <div className={scmCss.empty}>{t('scm.empty')}</div>}
-            {hasChanges && (
-              <Group
-                scm={scm}
-                preview={preview}
-                title={staged.length > 0 ? t('scm.staged') : undefined}
-                rows={staged}
-                bulkLabel={t('scm.unstage')}
-                onBulk={(rows) => void scm.unstage(rows.map((row) => row.path))}
-                onDiscard={requestDiscard}
-              />
-            )}
-            {hasChanges && unstaged.length > 0 && (
-              <Group
-                scm={scm}
-                preview={preview}
-                rows={unstaged}
-                bulkLabel={t('scm.stage')}
-                onBulk={(rows) => void scm.stage(rows.map((row) => row.path))}
-                onDiscard={requestDiscard}
-              />
-            )}
-            {untracked.length > 0 && (
-              <Group
-                scm={scm}
-                preview={preview}
-                title={t('scm.untracked')}
-                rows={untracked}
-                bulkLabel={t('scm.stage')}
-                onBulk={(rows) => void scm.stage(rows.map((row) => row.path))}
-                onDiscard={requestDiscard}
+  return (
+    <div className={`aionui-root ${scmCss.panel}`} style={{ flex: changesSectionOpen ? 1 : undefined }}>
+      {/* 更改 section header (always mounted; collapsed = 收纳成一行). */}
+      <div
+        className={scmCss.sectionHeader}
+        onClick={() => scm.setSectionCollapsed('changes', changesSectionOpen)}
+        onKeyDown={activateOnKey(() => { scm.setSectionCollapsed('changes', changesSectionOpen) })}
+        role="button"
+        tabIndex={0}
+        aria-expanded={changesSectionOpen}
+      >
+        <span className={`${scmCss.sectionChevron}${changesSectionOpen ? ` ${scmCss.sectionChevronOpen}` : ''}`}>
+          <ChevronRightIcon size={13} />
+        </span>
+        <span className={scmCss.sectionTitle}>{t('scm.changes')}</span>
+        <span
+          style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: 'auto' }}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            className={`${scmCss.sectionAction}${state.viewMode === 'list' ? '' : ''}`}
+            title={t('scm.viewList')}
+            style={{ color: state.viewMode === 'list' ? 'var(--aion-brand)' : undefined }}
+            onClick={() => scm.setViewMode('list')}
+          >
+            <ListIcon size={13} />
+          </button>
+          <button
+            type="button"
+            className={scmCss.sectionAction}
+            title={t('scm.viewTree')}
+            style={{ color: state.viewMode === 'tree' ? 'var(--aion-brand)' : undefined }}
+            onClick={() => scm.setViewMode('tree')}
+          >
+            <TreeIcon size={13} />
+          </button>
+        </span>
+      </div>
+
+      {/* Animated body: branch bar + sync notice + commit box + changes list. */}
+      <div className={`${gitCss.sectionBodyAnim}${changesSectionOpen ? ` ${gitCss.sectionBodyAnimOpen}` : ''}`}>
+        <div className={gitCss.sectionBodyInner}>
+          {/* Branch bar: branch chip + worktree ops + remote ops. */}
+          <div className={gitCss.branchBar}>
+            <button
+              type="button"
+              className={gitCss.branchBtn}
+              onClick={() => setBranchOpen((o) => !o)}
+              aria-expanded={branchOpen}
+              title={branch === '' ? t('git.branch.detached') : branch}
+            >
+              <BranchIcon size={14} />
+              <span className={gitCss.branchLabel}>{branch === '' ? t('git.branch.detached') : branch}</span>
+              <ChevronDownIcon size={12} />
+            </button>
+            <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 2 }}>
+              <button type="button" className={gitCss.syncBtn} title={t('scm.stageAll')} disabled={worktreeCount === 0} onClick={stageAll}>
+                <PlusIcon size={13} />
+              </button>
+              <button type="button" className={gitCss.syncBtn} title={t('scm.discardAll')} disabled={worktreeCount === 0} onClick={discardAll}>
+                <UndoIcon size={13} />
+              </button>
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: 6 }}>
+              <button type="button" className={gitCss.syncBtn} title={t('git.pull')} disabled={gitState.syncing} onClick={() => void git.pull()}>
+                <DownloadIcon size={13} />
+              </button>
+              <button type="button" className={gitCss.syncBtn} title={t('git.push')} disabled={gitState.syncing} onClick={() => void git.push()}>
+                <UploadIcon size={13} />
+              </button>
+            </span>
+            {branchOpen && (
+              <BranchPopover
+                stores={stores}
+                onClose={() => setBranchOpen(false)}
+                onCreate={() => { setBranchOpen(false); onCreateBranch() }}
               />
             )}
           </div>
-        )}
+
+          {(gitState.syncError !== null || gitState.syncNotice !== null) && (
+            <div className={gitCss.syncNotice}>
+              {gitState.syncError !== null ? gitErrorCopy(gitState.syncError) : gitState.syncNotice}
+            </div>
+          )}
+
+          {/* Commit box: only meaningful in a repo. */}
+          {status !== null && (
+            <div className={gitCss.commitBox}>
+              <textarea
+                className={gitCss.commitInput}
+                value={gitState.commitMessage}
+                placeholder={t('git.commit.message')}
+                onChange={(event) => git.setCommitMessage(event.target.value)}
+                onKeyDown={(event) => { if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') doCommit() }}
+                rows={3}
+              />
+              <div className={gitCss.commitRow}>
+                <span className={gitCss.commitMeta}>{staged.length > 0 ? `${staged.length} ${t('scm.staged')}` : ''}</span>
+                <button type="button" className={gitCss.commitBtn} disabled={!canCommit} onClick={doCommit}>
+                  {gitState.committing ? t('git.sync.loading') : t('git.commit.button')}
+                </button>
+              </div>
+              {gitState.commitError !== null && <div className={gitCss.error}>{gitErrorCopy(gitState.commitError)}</div>}
+            </div>
+          )}
+
+          <div className={scmCss.sectionBody}>
+            {status === null
+              ? state.loading
+                ? <div className={scmCss.loading}>{t('scm.loading')}</div>
+                : state.gitMissing
+                  ? <div className={scmCss.notRepo}>{t('scm.gitMissing')}</div>
+                  : <div className={scmCss.notRepo}>{t('scm.notRepo')}</div>
+              : (
+                <>
+                  {!hasChanges && <div className={scmCss.empty}>{t('scm.empty')}</div>}
+                  {hasChanges && (
+                    <Group
+                      scm={scm}
+                      preview={preview}
+                      title={staged.length > 0 ? t('scm.staged') : undefined}
+                      rows={staged}
+                      bulkLabel={t('scm.unstage')}
+                      onBulk={(rows) => void scm.unstage(rows.map((row) => row.path))}
+                      onDiscard={requestDiscard}
+                    />
+                  )}
+                  {hasChanges && unstaged.length > 0 && (
+                    <Group
+                      scm={scm}
+                      preview={preview}
+                      rows={unstaged}
+                      bulkLabel={t('scm.stage')}
+                      onBulk={(rows) => void scm.stage(rows.map((row) => row.path))}
+                      onDiscard={requestDiscard}
+                    />
+                  )}
+                  {untracked.length > 0 && (
+                    <Group
+                      scm={scm}
+                      preview={preview}
+                      title={t('scm.untracked')}
+                      rows={untracked}
+                      bulkLabel={t('scm.stage')}
+                      onBulk={(rows) => void scm.stage(rows.map((row) => row.path))}
+                      onDiscard={requestDiscard}
+                    />
+                  )}
+                </>
+              )}
+          </div>
+        </div>
       </div>
 
       {discardTargets !== null && (

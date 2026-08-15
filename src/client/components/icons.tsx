@@ -256,6 +256,31 @@ export function EmptyFolderIcon({ size = 16, className }: IconProps): JSX.Elemen
   )
 }
 
+/** Stacked-documents glyph used for the Files tab in the workbench tab bar. */
+export function FilesIcon({ size = 16, className }: IconProps): JSX.Element {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M6 2h4.5L13 4.5V11a1 1 0 0 1-1 1H6.5a1 1 0 0 1-1-1V3a1 1 0 0 1 .5-1Z" />
+      <path d="M10.5 2v2.5H13" />
+      <path d="M2.5 5.5H7l2.5 2.5v5.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6.5a1 1 0 0 1 .5-.9Z" />
+      <path d="M7 5.5V8h2.5" />
+    </svg>
+  )
+}
+
+/** Simplified git-logo glyph used for the Git tab in the workbench tab bar. */
+export function GitIcon({ size = 16, className }: IconProps): JSX.Element {
+  return (
+    <svg {...base(size)} className={className}>
+      <circle cx="8" cy="11.6" r="1.7" />
+      <circle cx="3.9" cy="3.9" r="1.5" />
+      <circle cx="12.1" cy="3.9" r="1.5" />
+      <path d="M8.8 10.3c1.2-1.3 2-3.1 2.6-5.2" />
+      <path d="M7.2 10.3c-1.2-1.3-2-3.1-2.6-5.2" />
+    </svg>
+  )
+}
+
 export function CheckIcon({ size = 14, className }: IconProps): JSX.Element {
   return (
     <svg {...base(size)} className={className}>

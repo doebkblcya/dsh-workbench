@@ -3,7 +3,8 @@
  * 37px, 12px baseline with 8px row padding so content lands at 20px).
  */
 
-/* The Files/Changes tab bar: 28px buttons + 4px vertical padding + 1px border. */
+/* The Files/Git tab bar: a distinct header strip (bg-3) above the bg-1 body,
+   32px buttons + 6px vertical padding + 1px border. */
 .tabBar {
   position: relative;
   /* Above third-party skin fixed decoration layers (z-index ~20) so the tab
@@ -12,18 +13,22 @@
   z-index: 30;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 8px 4px 12px;
+  gap: 6px;
+  padding: 6px 8px 6px 12px;
   flex-shrink: 0;
-  border-bottom: 1px solid var(--aion-bg-3);
-  background: var(--aion-bg-1);
+  border-bottom: 1px solid var(--aion-bg-2);
+  background: var(--aion-bg-3);
 }
 
 .tabBtn {
-  height: 28px;
-  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   background: transparent;
   color: var(--aion-text-secondary);
   font-size: 13px;
@@ -47,11 +52,17 @@
 }
 
 .tabBtnActive {
-  height: 28px;
-  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: none;
-  border-radius: 2px;
-  background: var(--aion-bg-2);
+  border-radius: 4px;
+  /* The active tab recedes into the body color so it reads as "the current
+     surface" against the darker header strip (VS Code editor-tab pattern). */
+  background: var(--aion-bg-1);
   color: var(--aion-text-primary);
   font-size: 13px;
   font-family: var(--aion-font-sans);

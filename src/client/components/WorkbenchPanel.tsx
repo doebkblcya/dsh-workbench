@@ -12,7 +12,7 @@ import { t } from '../locales.ts'
 import type { PanelStores } from '../store.ts'
 import { ExplorerPanel } from './ExplorerPanel.tsx'
 import { GitPanel } from './GitPanel.tsx'
-import { ExpandRightIcon } from './icons.tsx'
+import { ExpandRightIcon, FilesIcon, GitIcon } from './icons.tsx'
 import explorerCss from '../styles/explorer.module.css'
 import '../styles/tokens.module.css'
 
@@ -34,16 +34,20 @@ export function WorkbenchPanel({
           className={tab === 'files' ? explorerCss.tabBtnActive : explorerCss.tabBtn}
           onClick={() => setTab('files')}
           aria-pressed={tab === 'files'}
+          aria-label={t('explorer.tabs.files')}
+          title={t('explorer.tabs.files')}
         >
-          {t('explorer.tabs.files')}
+          <FilesIcon size={18} />
         </button>
         <button
           type="button"
           className={tab === 'git' ? explorerCss.tabBtnActive : explorerCss.tabBtn}
           onClick={() => setTab('git')}
           aria-pressed={tab === 'git'}
+          aria-label={t('git.tab')}
+          title={t('git.tab')}
         >
-          {t('git.tab')}
+          <GitIcon size={18} />
         </button>
         <button
           type="button"

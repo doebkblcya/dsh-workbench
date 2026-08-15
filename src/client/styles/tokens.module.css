@@ -245,7 +245,7 @@
      window buttons occupy the top-right corner of the webview; shift the
      chevron below that strip. Browsers report 0px, so layout is
      unchanged there (issue #169). */
-  top: calc(6px + env(titlebar-area-height, 0px));
+  top: calc(11px + env(titlebar-area-height, 0px));
   right: 8px;
   z-index: 30;
   width: 24px;
@@ -261,11 +261,12 @@
   transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 :global(.aionui-collapse-chevron:hover) {
-  background-color: var(--aion-bg-3);
+  /* On the bg-3 tab bar, keep hover/active visible in both themes. */
+  background-color: var(--aion-fill-2);
   color: var(--aion-text-primary);
 }
 :global(.aionui-collapse-chevron:active) {
-  background-color: var(--aion-bg-active);
+  background-color: var(--aion-bg-2);
 }
 :global(.aionui-collapse-chevron:focus-visible) {
   outline: 2px solid var(--aion-primary);

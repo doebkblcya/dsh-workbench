@@ -6,17 +6,11 @@
 .panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
-}
-
-/* Section: header + body. */
-.section {
-  display: flex;
-  flex-direction: column;
   min-height: 0;
   flex-shrink: 0;
 }
+
+/* Section header (shared look for the 更改 and 图表 sections). */
 
 .sectionHeader {
   display: flex;
