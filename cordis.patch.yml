@@ -8,6 +8,12 @@
 # and /git/* routes), and the `dsh.client` declaration in package.json makes
 # the browser half (exports "./client", served at /plugins/ui-dsh-workbench/client.js)
 # load in the web GUI.
+#
+# NOTE: `name` MUST match the actual package name (including the scope) —
+# the loader resolves it via `import(name)` from the profile dir. It was
+# `dsh-workbench` (no scope) after the rename to @doebkblcya/dsh-workbench,
+# which made every `dsh web` boot fail with ERR_MODULE_NOT_FOUND
+# ("Cannot find package 'dsh-workbench'"). Fixed 2026-08-15.
 - insert:
     - id: ui-dsh-workbench
-      name: 'dsh-workbench'
+      name: '@doebkblcya/dsh-workbench'
