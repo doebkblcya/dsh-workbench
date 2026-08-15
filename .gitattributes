@@ -1,0 +1,6 @@
+# Normalize line endings to LF across the repo (avoids CRLF noise in diffs).
+* text=auto eol=lf
+
+# Lockfile: treat as generated — collapse its diff on GitHub and exclude it
+# from the language statistics.
+package-lock.json linguist-generated=true

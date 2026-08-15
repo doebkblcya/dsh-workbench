@@ -1,16 +1,18 @@
 # dsh-workbench — DSH Web GUI right-side workbench
 
-A single-package plugin that adds a VS Code-style three-column right-side
-workbench to the DSH Web GUI: **`[Preview][Git][Files]`**.
+A single-package plugin that adds a VS Code-style right-side workbench to the
+DSH Web GUI: a **Preview** column plus a **single workbench panel** with
+**Files / Git** tabs.
 
-- **Files** (flush with the window edge): a lazy file tree with filename search.
-  Clicking a file opens it in the preview panel; a full row expands a folder.
-- **Preview** (innermost): multi-tab preview of markdown / html / code / diff /
-  csv / pdf / office / images / text, with source↔preview toggle, split edit
-  and save.
-- **Git** (middle): split top/bottom. The top is a Source-Control-like pane —
-  branch bar (switch / create branch), commit box, and the changes list
-  (stage / unstage / discard). The bottom is an inline Git graph.
+- **Workbench panel** (flush with the window edge): a Files/Git tab bar.
+  - **Files**: a lazy file tree with filename search. Clicking a file opens it
+    in the Preview column; clicking a folder row expands/collapses it.
+  - **Git**: split top/bottom. The top is a Source-Control-like pane — branch
+    bar (switch / create branch), commit box, and the changes list
+    (stage / unstage / discard). The bottom is an inline Git graph.
+- **Preview** (to the left of the workbench panel): multi-tab preview of
+  markdown / html / code / diff / csv / pdf / office / images / text, with
+  source↔preview toggle, split edit and save.
 
 ## What it does
 
@@ -21,11 +23,8 @@ workbench to the DSH Web GUI: **`[Preview][Git][Files]`**.
 | Changes list (stage / unstage / discard) | ✅ |
 | Branch switch / create | ✅ |
 | Inline Git graph | ✅ |
-| Commit | ✅ (phase 1) |
-| Push / pull | ✅ (phase 2, host-side auth) |
-
-The branch selector that upstream placed in the conversation header chip has
-been removed; branch switching lives in the Git column's top bar.
+| Commit | ✅ |
+| Push / pull | ✅ (host-side auth) |
 
 ## Architecture
 
@@ -33,16 +32,24 @@ been removed; branch switching lives in the Git column's top bar.
   a *single unified* git service, exposed over `/workbench/*` (fs) and
   `/git/*` (git), plus one `/workbench/events` SSE stream.
 - **Browser half** (`src/client`): a DOM layout controller that extends the
-  shell's 3-column grid into 6 columns, three React roots, and framework-free
-  stores (layout / explorer / scm / preview / git).
+  shell's 3-column grid into 5 columns (Preview + workbench panel), two React
+  roots, and framework-free stores (layout / explorer / scm / preview / git).
 - The two upstream git services (dsh-aionui-panel's changes + dsh-git-graph's
   branches/graph/switch) are merged into one service with one gate, one repo
   cache, and one combined operation-marker probe (1 git spawn, not 7).
 
 ## Install
 
+From source (local):
+
 ```sh
 dsh plugin --profile web add link:<path-to-this-repo>
+```
+
+From npm:
+
+```sh
+dsh plugin --profile web add @doebkblcya/dsh-workbench
 ```
 
 ## Build

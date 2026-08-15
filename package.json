@@ -1,6 +1,6 @@
 {
-  "name": "dsh-workbench",
-  "description": "DSH web GUI right-side workbench plugin: a VS Code-style [Preview][Git][Files] three-column panel — lazy file explorer, Source-Control-like changes + commit, branch switching, and an inline Git graph — driven by real host-side fs/git services, hot-pluggable via a profile bundle without any dsh source changes.",
+  "name": "@doebkblcya/dsh-workbench",
+  "description": "DSH Web GUI right-side workbench plugin: a VS Code-style single right panel with Files/Git tabs plus a Preview column — lazy file explorer, Source-Control-like changes + commit, branch switching, and an inline Git graph — driven by real host-side fs/git services, hot-pluggable via a profile bundle without any dsh source changes.",
   "version": "0.1.0",
   "type": "module",
   "engines": {
@@ -46,6 +46,18 @@
     "type": "git",
     "url": "https://github.com/doebkblcya/dsh-workbench.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek",
+    "workbench",
+    "git",
+    "file-explorer",
+    "source-control",
+    "vscode"
+  ],
   "peerDependencies": {
     "react": "^18.2.0"
   },
