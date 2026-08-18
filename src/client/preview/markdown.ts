@@ -197,10 +197,11 @@ export function renderInline(text: string, options?: MarkdownRenderOptions): str
         continue
       }
     }
-    // Strikethrough ~~text~~
-    if (char === '~' && text[i + 1] === '~') {
+    // Strikethrough ~~text~~. A `~` immediately after the opener (i.e. `~~~`)
+    // is a tilde fence, not strikethrough.
+    if (char === '~' && text[i + 1] === '~' && text[i + 2] !== '~') {
       const end = text.indexOf('~~', i + 2)
-      if (end !== -1) {
+      if (end !== -1 && text[end + 2] !== '~') {
         out += `<del>${renderInline(text.slice(i + 2, end), options)}</del>`
         i = end + 2
         continue
@@ -229,18 +230,22 @@ export function renderMarkdown(source: string, options?: MarkdownRenderOptions):
   while (i < n) {
     const line = lines[i]
 
-    // Fenced code block.
-    const fence = /^```([\w+-]*)\s*$/.exec(line)
+    // Fenced code block. CommonMark fences: three or more backticks or
+    // tildes; the closing fence uses the same character (length >= 3).
+    const fence = /^(`{3,}|~{3,})([\w+-]*)\s*$/.exec(line)
     if (fence !== null) {
       flushParagraph(paragraph)
-      const lang = fence[1] ?? ''
+      const marker = fence[1]
+      const fenceChar = marker[0]
+      const lang = fence[2] ?? ''
       i += 1
       const code: string[] = []
-      while (i < n && !/^```\s*$/.test(lines[i])) {
+      const closing = new RegExp(`^\\${fenceChar}{3,}\\s*$`)
+      while (i < n && !closing.test(lines[i])) {
         code.push(lines[i])
         i += 1
       }
-      i += 1 // closing fence
+      i += 1 // closing fence (may run past the end when missing)
       const langAttr = lang === '' ? '' : ` class="language-${escapeHtml(lang)}"`
       out.push(`<pre${langAttr}><code>${escapeHtml(code.join('\n'))}</code></pre>`)
       continue
